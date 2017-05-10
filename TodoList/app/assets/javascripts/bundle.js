@@ -4645,6 +4645,8 @@ var _todo_api_utils = __webpack_require__(100);
 
 var APIUtils = _interopRequireWildcard(_todo_api_utils);
 
+var _error_actions = __webpack_require__(237);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var RECEIVE_TODO = exports.RECEIVE_TODO = "RECEIVE_TODO";
@@ -4684,6 +4686,8 @@ var createTodo = exports.createTodo = function createTodo(todo) {
   return function (dispatch) {
     return APIUtils.postRequest(todo).then(function (res) {
       return dispatch(receiveTodo(res));
+    }, function (err) {
+      return dispatch((0, _error_actions.receiveErrors)(err.responseJSON));
     });
   };
 };
@@ -11157,11 +11161,10 @@ var getRequest = exports.getRequest = function getRequest() {
 };
 
 var postRequest = exports.postRequest = function postRequest(todo) {
-  debugger;
-  $.ajax({
+  return $.ajax({
     url: 'api/todos',
     method: 'POST',
-    body: {
+    data: {
       todo: {
         title: todo.title,
         body: todo.body,
@@ -11527,7 +11530,7 @@ var thunk = function thunk(_ref) {
   return function (next) {
     return function (action) {
       if (typeof action === 'function') {
-        return action(dispatch, getState);
+        return action(dispatch);
       }
       return next(action);
     };
@@ -11552,10 +11555,15 @@ var _todos_reducer = __webpack_require__(109);
 
 var _todos_reducer2 = _interopRequireDefault(_todos_reducer);
 
+var _error_reducer = __webpack_require__(238);
+
+var _error_reducer2 = _interopRequireDefault(_error_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
-  todos: _todos_reducer2.default
+  todos: _todos_reducer2.default,
+  errors: _error_reducer2.default
 });
 
 exports.default = rootReducer;
@@ -11661,6 +11669,7 @@ window.receiveTodo = _todo_actions.receiveTodo;
 window.receiveTodos = _todo_actions.receiveTodos;
 window.getRequest = _todo_api_utils.getRequest;
 window.fetchTodos = _todo_actions.fetchTodos;
+window.createTodo = _todo_actions.createTodo;
 
 /***/ }),
 /* 111 */
@@ -24972,6 +24981,64 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+/* 237 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var RECEIVE_ERRORS = exports.RECEIVE_ERRORS = "RECEIVE_ERRORS";
+var CLEAR_ERRORS = exports.CLEAR_ERRORS = "CLEAR_ERRORS";
+
+var receiveErrors = exports.receiveErrors = function receiveErrors(error) {
+  debugger;
+  return {
+    type: RECEIVE_ERRORS,
+    error: error
+  };
+};
+
+var clearErrors = exports.clearErrors = function clearErrors() {
+  return {
+    type: CLEAR_ERRORS
+  };
+};
+
+/***/ }),
+/* 238 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _error_actions = __webpack_require__(237);
+
+var errorReducer = function errorReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+  Object.freeze(state);
+  switch (action.type) {
+    case _error_actions.RECEIVE_ERRORS:
+      debugger;
+      return state.concat(action.error);
+    case _error_actions.CLEAR_ERRORS:
+      return [];
+    default:
+      return state;
+  }
+};
+
+exports.default = errorReducer;
 
 /***/ })
 /******/ ]);

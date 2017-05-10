@@ -5,11 +5,10 @@ export const getRequest = () =>(
 );
 
 export const postRequest = (todo) => {
-  debugger;
-  $.ajax({
+  return $.ajax({
     url: 'api/todos',
     method: 'POST',
-    body: {
+    data: {
       todo: {
         title: todo.title,
         body: todo.body,

@@ -6,7 +6,7 @@ import Root from './components/root';
 
 import { getRequest } from './utils/todo_api_utils';
 import { allTodos } from './reducers/selectors';
-import { receiveTodo, receiveTodos, fetchTodos } from './actions/todo_actions';
+import { receiveTodo, receiveTodos, fetchTodos, createTodo } from './actions/todo_actions';
 
 const store = configureStore();
 
@@ -21,3 +21,4 @@ window.receiveTodo = receiveTodo;
 window.receiveTodos = receiveTodos;
 window.getRequest = getRequest;
 window.fetchTodos = fetchTodos;
+window.createTodo = createTodo;
