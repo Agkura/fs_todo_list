@@ -5,7 +5,7 @@ class TodoForm extends React.Component{
   constructor(props){
     super(props);
     this.state = {title: "", body: "", done: false, id: ""};
-    this.receiveTodo = props.receiveTodo;
+    this.createTodo = props.createTodo;
   }
 
   handleTitle(event){
@@ -22,12 +22,12 @@ class TodoForm extends React.Component{
 
   handleSubmit(event){
     event.preventDefault();
-    this.setState({title: "", body: ""});
-    this.receiveTodo({
+    this.createTodo({
       title: this.state.title,
       body: this.state.body,
-      id: uniqueId(),
       done: false
+    }).then( () => {
+      this.setState({title: "", body: ""});
     });
   }
 
